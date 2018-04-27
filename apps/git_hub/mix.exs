@@ -1,15 +1,14 @@
-defmodule Extocat.MixProject do
+defmodule GitHub.MixProject do
   use Mix.Project
 
   def application,
     do: [
-      extra_applications: [:logger],
-      mod: {Extocat.Application, []}
+      extra_applications: [:logger]
     ]
 
   def project,
     do: [
-      app: :extocat,
+      app: :git_hub,
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps: deps(),
@@ -23,6 +22,7 @@ defmodule Extocat.MixProject do
 
   defp deps,
     do: [
-      {:git_hub, in_umbrella: true}
+      {:hackney, "~> 1.12"},
+      {:jason, "~> 1.0"}
     ]
 end
