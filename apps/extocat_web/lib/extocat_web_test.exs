@@ -121,4 +121,30 @@ defmodule ExtocatWebTest do
       |> assert_response(200)
     end
   end
+
+  test "unable to reach GitHub" do
+    conn =
+      :get
+      |> conn("/timeout-lord")
+      |> ExtocatWeb.call(@opts)
+
+    assert_response(conn, 502)
+    assert ~s({"errors":[{"status":"502","title":"Bad Gateway"}]}) === conn.resp_body
+  end
+
+  test "missing username" do
+    conn =
+      :get
+      |> conn("/the-name-of-the-doctor")
+      |> ExtocatWeb.call(@opts)
+
+    assert_response(conn, 404)
+    assert ~s({"errors":[{"status":"404","title":"Not Found"}]}) === conn.resp_body
+  end
+
+  test "existing username", %{request: request} do
+    conn = ExtocatWeb.call(request, @opts)
+    assert_response(conn, 200)
+    assert ~s({"data":{"id":"david-tennant","score":5,"type":"scorecards"}}) === conn.resp_body
+  end
 end
